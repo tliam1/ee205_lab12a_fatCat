@@ -11,6 +11,7 @@
 
 
 #include <iostream>
+#include <cassert>
 using namespace std;
 class Weight {
 //testing push
@@ -24,6 +25,25 @@ public:
     static const string KILO_LABEL;
     static const string SLUG_LABEL;
     UnitOfWeight unitOfWeight = POUND;
+    static float globalWeight;
+    float maxWeight;
 private:
+
+
+
+    //constructors
+
+    //static methods
+    static float fromKilogramToPound( float kilogram ) noexcept;
+    static float fromSlugToPound( float slug ) noexcept;
+    static float fromPoundToKilogram( float pound ) noexcept;
+    static float fromPoundToSlug( float pound ) noexcept;
+    static float convertWeight( float fromWeight
+            ,UnitOfWeight fromUnit
+            ,UnitOfWeight toUnit ) noexcept;
+    bool validate() const noexcept;
+
+
+
 };
 
