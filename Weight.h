@@ -24,22 +24,29 @@ public:
     static const string POUND_LABEL;
     static const string KILO_LABEL;
     static const string SLUG_LABEL;
-    UnitOfWeight unitOfWeight = POUND;
     static float globalWeight; //remove later
-    float weight;
-    float maxWeight;
-private:
 
+private:
+    bool weightIsKnown = false;
+    UnitOfWeight unitOfWeight = POUND; //once set cant change (not initialization though)
+    float weight = UNKNOWN_WEIGHT; //can change once set
+    float maxWeight = UNKNOWN_WEIGHT; //cant change once set
+    bool hasMaxWeight = false;
 
 
     //constructors (7)
     Weight() noexcept;
-    Weight(float newWeight);
-    Weight(UnitOfWeight newUnitOfWeight) noexcept;
+    explicit Weight(float newWeight);
+    explicit Weight(UnitOfWeight newUnitOfWeight) noexcept;
     Weight(float newWeight, UnitOfWeight newUnitOfWeight);
     Weight(float newWeight, float newMaxWeight);
     Weight(UnitOfWeight newUnitOfWeight, float newMaxWeight);
     Weight(float newWeight, UnitOfWeight newUnitOfWeight, float newMaxUnitOfWeight);
+    //getters and setters
+public:
+    float getMaxWeight() const;
+
+private:
     //static methods
     static float fromKilogramToPound( float kilogram ) noexcept;
     static float fromSlugToPound( float slug ) noexcept;
@@ -49,8 +56,11 @@ private:
             ,UnitOfWeight fromUnit
             ,UnitOfWeight toUnit ) noexcept;
     //checks/other methods
-    bool validate() const noexcept;
-
+    bool validate(float weightToValidate) const noexcept;
+    bool isWeightValid(float checkWeight) const;
+    //dont really need any fuctions checking for if we have values
+    //as we already have bools that do that, adding a function
+    //seems a bit redundant
 
 
 };

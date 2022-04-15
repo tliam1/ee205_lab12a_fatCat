@@ -14,17 +14,23 @@
 const float Weight::UNKNOWN_WEIGHT = -1;
 const float Weight::POUND_IN_A_KILO =  1.0f/2.20462f; //(kilo/lbs)
 const float Weight::POUND_IN_A_SLUG = 1.0f/32.172f;//(slug/lbs)
+const string Weight::POUND_LABEL = "Pound";
+const string Weight::KILO_LABEL = "Kilo";
+const string Weight::SLUG_LABEL = "Slug";
 float Weight::globalWeight = 0;
 //initializing constants end
 
 Weight::Weight() noexcept {
     weight = UNKNOWN_WEIGHT;
     //what is the default MAX WEIGHT??
+    maxWeight = UNKNOWN_WEIGHT;
 }
 
 Weight::Weight(float newWeight) {
     //@todo validation
     weight = newWeight;
+    weightIsKnown = true;
+    maxWeight = UNKNOWN_WEIGHT;
     //what is the default MAX WEIGHT??
 }
 
@@ -33,32 +39,40 @@ Weight::Weight(Weight::UnitOfWeight newUnitOfWeight) noexcept {
     unitOfWeight = newUnitOfWeight;
     weight = UNKNOWN_WEIGHT;
     //what is the default MAX WEIGHT??
+    maxWeight = UNKNOWN_WEIGHT;
 }
 
 Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
     //@todo validation
     weight = newWeight;
+    weightIsKnown = true;
     unitOfWeight = newUnitOfWeight;
     //what is the default MAX WEIGHT??
+    maxWeight = UNKNOWN_WEIGHT;
 }
 
 Weight::Weight(float newWeight, float newMaxWeight) {
     //@todo validation
     weight = newWeight;
+    weightIsKnown = true;
     maxWeight = newMaxWeight;
+    hasMaxWeight = true;
 }
 
 Weight::Weight(Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
     //@todo validation
     weight = UNKNOWN_WEIGHT;
     maxWeight = newMaxWeight;
+    hasMaxWeight = true;
     unitOfWeight = newUnitOfWeight;
 }
 
 Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
     //@todo validation
     weight = newWeight;
+    weightIsKnown = true;
     maxWeight = newMaxWeight;
+    hasMaxWeight = true;
     unitOfWeight = newUnitOfWeight;
 }
 
@@ -120,5 +134,26 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
     }
 
     return globalWeight;
+}
+
+float Weight::getMaxWeight() const {
+    if (maxWeight <= 0)
+        return UNKNOWN_WEIGHT;
+    return maxWeight;
+}
+
+bool Weight::validate(float weightToValidate) const noexcept {
+    if (isWeightValid(weightToValidate) && getMaxWeight() != UNKNOWN_WEIGHT && weightIsKnown)
+        return true;
+    assert("Missing weight requirement");
+    return false;
+}
+
+bool Weight::isWeightValid(float checkWeight) const {
+    if(checkWeight > 0 && checkWeight < maxWeight)
+        return true;
+
+    assert("Missing weight requirement");
+    return false;
 }
 
