@@ -29,11 +29,14 @@ public:
 private:
     bool weightIsKnown = false;
     UnitOfWeight unitOfWeight = POUND; //once set cant change (not initialization though)
-    float weight = UNKNOWN_WEIGHT; //can change once set
+    static float weight; //can change once set
     float maxWeight = UNKNOWN_WEIGHT; //cant change once set
     bool hasMaxWeight = false;
 
 
+
+
+public:
     //constructors (7)
     Weight() noexcept;
     explicit Weight(float newWeight);
@@ -42,11 +45,11 @@ private:
     Weight(float newWeight, float newMaxWeight);
     Weight(UnitOfWeight newUnitOfWeight, float newMaxWeight);
     Weight(float newWeight, UnitOfWeight newUnitOfWeight, float newMaxUnitOfWeight);
-    //getters and setters
-public:
-    float getMaxWeight() const;
 
-private:
+    //getters and setters
+    float getMaxWeight() const noexcept;
+    UnitOfWeight  getWeightUnit() const noexcept;
+    float getWeight() const noexcept;
     //static methods
     static float fromKilogramToPound( float kilogram ) noexcept;
     static float fromSlugToPound( float slug ) noexcept;
@@ -55,12 +58,15 @@ private:
     static float convertWeight( float fromWeight
             ,UnitOfWeight fromUnit
             ,UnitOfWeight toUnit ) noexcept;
+
     //checks/other methods
     bool validate(float weightToValidate) const noexcept;
     bool isWeightValid(float checkWeight) const;
     //dont really need any fuctions checking for if we have values
     //as we already have bools that do that, adding a function
     //seems a bit redundant
+private:
+
 
 
 };

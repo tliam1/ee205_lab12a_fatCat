@@ -18,6 +18,7 @@ const string Weight::POUND_LABEL = "Pound";
 const string Weight::KILO_LABEL = "Kilo";
 const string Weight::SLUG_LABEL = "Slug";
 float Weight::globalWeight = 0;
+float Weight::weight = UNKNOWN_WEIGHT;
 //initializing constants end
 
 Weight::Weight() noexcept {
@@ -28,6 +29,7 @@ Weight::Weight() noexcept {
 
 Weight::Weight(float newWeight) {
     //@todo validation
+    assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
     maxWeight = UNKNOWN_WEIGHT;
@@ -44,6 +46,7 @@ Weight::Weight(Weight::UnitOfWeight newUnitOfWeight) noexcept {
 
 Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
     //@todo validation
+    assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
     unitOfWeight = newUnitOfWeight;
@@ -53,6 +56,7 @@ Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
 
 Weight::Weight(float newWeight, float newMaxWeight) {
     //@todo validation
+    assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
     maxWeight = newMaxWeight;
@@ -68,12 +72,13 @@ Weight::Weight(Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
 }
 
 Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
-    //@todo validation
+    assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
     maxWeight = newMaxWeight;
     hasMaxWeight = true;
     unitOfWeight = newUnitOfWeight;
+    assert(validate(weight));
 }
 
 
@@ -115,28 +120,26 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
             assert("ILLEGAL WEIGHT");
             break;
     }
-    //pointless operations if they are the same
-    if (fromUnit != toUnit) {
-        switch (toUnit) {
-            case POUND:
-                fromWeight = fromWeight;
-                break;
-            case KILO:
-                fromPoundToKilogram(fromWeight);
-                break;
-            case SLUG:
-                fromPoundToSlug(fromWeight);
-                break;
-            default:
-                assert("ILLEGAL WEIGHT");
-                break;
-        }
+    switch (toUnit) {
+        case POUND:
+            fromWeight = fromWeight;
+            weight = fromWeight;
+            break;
+        case KILO:
+            weight = fromPoundToKilogram(fromWeight);
+            break;
+        case SLUG:
+            weight = fromPoundToSlug(fromWeight);
+            break;
+        default:
+            assert("ILLEGAL WEIGHT");
+            break;
     }
 
     return globalWeight;
 }
 
-float Weight::getMaxWeight() const {
+float Weight::getMaxWeight() const noexcept{
     if (maxWeight <= 0)
         return UNKNOWN_WEIGHT;
     return maxWeight;
@@ -145,15 +148,24 @@ float Weight::getMaxWeight() const {
 bool Weight::validate(float weightToValidate) const noexcept {
     if (isWeightValid(weightToValidate) && getMaxWeight() != UNKNOWN_WEIGHT && weightIsKnown)
         return true;
-    assert("Missing weight requirement");
+    cout << "Missing weight condition"<<endl;
     return false;
 }
 
 bool Weight::isWeightValid(float checkWeight) const {
-    if(checkWeight > 0 && checkWeight < maxWeight)
+    if(checkWeight > 0 && (checkWeight < maxWeight || !hasMaxWeight))
         return true;
-
-    assert("Missing weight requirement");
+    cout << "Missing weight condition"<<endl;
     return false;
+}
+
+Weight::UnitOfWeight Weight::getWeightUnit() const noexcept {
+    return Weight::unitOfWeight;
+}
+
+float Weight::getWeight() const noexcept {
+    if (!weightIsKnown)
+        return UNKNOWN_WEIGHT;
+    return weight;
 }
 
