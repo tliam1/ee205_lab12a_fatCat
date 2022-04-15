@@ -14,8 +14,8 @@
 #include <cassert>
 using namespace std;
 class Weight {
-//testing push
 
+//vars
 public:
     typedef enum { POUND, KILO, SLUG } UnitOfWeight ;
     static const float UNKNOWN_WEIGHT;
@@ -35,7 +35,7 @@ private:
 
 
 
-
+//methods
 public:
     //constructors (7)
     Weight() noexcept;
@@ -50,6 +50,8 @@ public:
     float getMaxWeight() const noexcept;
     UnitOfWeight  getWeightUnit() const noexcept;
     float getWeight() const noexcept;
+    void setWeight(float newWeight);
+    void setWeight(float newWeight, UnitOfWeight weightUnits);
     //static methods
     static float fromKilogramToPound( float kilogram ) noexcept;
     static float fromSlugToPound( float slug ) noexcept;

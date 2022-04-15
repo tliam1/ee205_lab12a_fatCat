@@ -27,7 +27,7 @@ Weight::Weight() noexcept {
     maxWeight = UNKNOWN_WEIGHT;
 }
 
-Weight::Weight(float newWeight) {
+Weight::Weight(float newWeight) : Weight(){
     //@todo validation
     assert(isWeightValid(newWeight));
     weight = newWeight;
@@ -36,7 +36,7 @@ Weight::Weight(float newWeight) {
     //what is the default MAX WEIGHT??
 }
 
-Weight::Weight(Weight::UnitOfWeight newUnitOfWeight) noexcept {
+Weight::Weight(UnitOfWeight newUnitOfWeight) noexcept : Weight(){
     //@todo validation
     unitOfWeight = newUnitOfWeight;
     weight = UNKNOWN_WEIGHT;
@@ -44,7 +44,7 @@ Weight::Weight(Weight::UnitOfWeight newUnitOfWeight) noexcept {
     maxWeight = UNKNOWN_WEIGHT;
 }
 
-Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
+Weight::Weight(float newWeight, UnitOfWeight newUnitOfWeight): Weight(){
     //@todo validation
     assert(isWeightValid(newWeight));
     weight = newWeight;
@@ -54,7 +54,7 @@ Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
     maxWeight = UNKNOWN_WEIGHT;
 }
 
-Weight::Weight(float newWeight, float newMaxWeight) {
+Weight::Weight(float newWeight, float newMaxWeight) : Weight() {
     //@todo validation
     assert(isWeightValid(newWeight));
     weight = newWeight;
@@ -63,7 +63,7 @@ Weight::Weight(float newWeight, float newMaxWeight) {
     hasMaxWeight = true;
 }
 
-Weight::Weight(Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
+Weight::Weight(UnitOfWeight newUnitOfWeight, float newMaxWeight) : Weight() {
     //@todo validation
     weight = UNKNOWN_WEIGHT;
     maxWeight = newMaxWeight;
@@ -71,7 +71,7 @@ Weight::Weight(Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
     unitOfWeight = newUnitOfWeight;
 }
 
-Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
+Weight::Weight(float newWeight, UnitOfWeight newUnitOfWeight, float newMaxWeight) : Weight() {
     assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
@@ -117,7 +117,8 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
             fromSlugToPound(fromWeight);
             break;
         default:
-            assert("ILLEGAL WEIGHT");
+            cout << "Illegal unit" << endl;
+            assert(false);
             break;
     }
     switch (toUnit) {
@@ -132,7 +133,8 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
             weight = fromPoundToSlug(fromWeight);
             break;
         default:
-            assert("ILLEGAL WEIGHT");
+            cout << "Illegal unit" << endl;
+            assert(false);
             break;
     }
 
@@ -167,5 +169,16 @@ float Weight::getWeight() const noexcept {
     if (!weightIsKnown)
         return UNKNOWN_WEIGHT;
     return weight;
+}
+
+void Weight::setWeight(float newWeight) {
+    assert(isWeightValid(newWeight));
+    Weight::weight = newWeight;
+}
+
+void Weight::setWeight(float newWeight, Weight::UnitOfWeight weightUnits) {
+    assert(isWeightValid(newWeight));
+    Weight::weight = newWeight;
+    Weight::unitOfWeight = weightUnits;
 }
 
