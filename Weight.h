@@ -25,14 +25,21 @@ public:
     static const string KILO_LABEL;
     static const string SLUG_LABEL;
     UnitOfWeight unitOfWeight = POUND;
-    static float globalWeight;
+    static float globalWeight; //remove later
+    float weight;
     float maxWeight;
 private:
 
 
 
-    //constructors
-
+    //constructors (7)
+    Weight() noexcept;
+    Weight(float newWeight);
+    Weight(UnitOfWeight newUnitOfWeight) noexcept;
+    Weight(float newWeight, UnitOfWeight newUnitOfWeight);
+    Weight(float newWeight, float newMaxWeight);
+    Weight(UnitOfWeight newUnitOfWeight, float newMaxWeight);
+    Weight(float newWeight, UnitOfWeight newUnitOfWeight, float newMaxUnitOfWeight);
     //static methods
     static float fromKilogramToPound( float kilogram ) noexcept;
     static float fromSlugToPound( float slug ) noexcept;
@@ -41,6 +48,7 @@ private:
     static float convertWeight( float fromWeight
             ,UnitOfWeight fromUnit
             ,UnitOfWeight toUnit ) noexcept;
+    //checks/other methods
     bool validate() const noexcept;
 
 

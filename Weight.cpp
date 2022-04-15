@@ -17,6 +17,54 @@ const float Weight::POUND_IN_A_SLUG = 1.0f/32.172f;//(slug/lbs)
 float Weight::globalWeight = 0;
 //initializing constants end
 
+Weight::Weight() noexcept {
+    weight = UNKNOWN_WEIGHT;
+    //what is the default MAX WEIGHT??
+}
+
+Weight::Weight(float newWeight) {
+    //@todo validation
+    weight = newWeight;
+    //what is the default MAX WEIGHT??
+}
+
+Weight::Weight(Weight::UnitOfWeight newUnitOfWeight) noexcept {
+    //@todo validation
+    unitOfWeight = newUnitOfWeight;
+    weight = UNKNOWN_WEIGHT;
+    //what is the default MAX WEIGHT??
+}
+
+Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight) {
+    //@todo validation
+    weight = newWeight;
+    unitOfWeight = newUnitOfWeight;
+    //what is the default MAX WEIGHT??
+}
+
+Weight::Weight(float newWeight, float newMaxWeight) {
+    //@todo validation
+    weight = newWeight;
+    maxWeight = newMaxWeight;
+}
+
+Weight::Weight(Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
+    //@todo validation
+    weight = UNKNOWN_WEIGHT;
+    maxWeight = newMaxWeight;
+    unitOfWeight = newUnitOfWeight;
+}
+
+Weight::Weight(float newWeight, Weight::UnitOfWeight newUnitOfWeight, float newMaxWeight) {
+    //@todo validation
+    weight = newWeight;
+    maxWeight = newMaxWeight;
+    unitOfWeight = newUnitOfWeight;
+}
+
+
+
+
 float Weight::fromKilogramToPound(float kilogram) noexcept {
     globalWeight = kilogram / POUND_IN_A_KILO;
     return globalWeight; //pointless with a global. will need to change later
@@ -73,3 +121,4 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
 
     return globalWeight;
 }
+
