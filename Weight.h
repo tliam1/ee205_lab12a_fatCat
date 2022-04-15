@@ -9,13 +9,10 @@
 /// @date   12_Apr_2022
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef EE205_LAB12A_FATCAT_WEIGHT_H
-#define EE205_LAB12A_FATCAT_WEIGHT_H
+
 
 
 class Weight {
-
+//testing push
 };
 
-
-#endif //EE205_LAB12A_FATCAT_WEIGHT_H
