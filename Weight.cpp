@@ -10,3 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "Weight.h"
+
+const float Weight::UNKNOWN_WEIGHT = -1;
+const float Weight::POUND_IN_A_KILO = -1;
+const float Weight::POUND_IN_A_SLUG = -1;

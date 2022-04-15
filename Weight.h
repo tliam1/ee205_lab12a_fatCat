@@ -10,9 +10,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-
+#include <iostream>
+using namespace std;
 class Weight {
 //testing push
+
+public:
+    typedef enum { POUND, KILO, SLUG } UnitOfWeight ;
+    static const float UNKNOWN_WEIGHT;
+    static const float POUND_IN_A_KILO;
+    static const float POUND_IN_A_SLUG;
+    static const string POUND_LABEL;
+    static const string KILO_LABEL;
+    static const string SLUG_LABEL;
+    UnitOfWeight unitOfWeight = POUND;
+private:
 };
 
