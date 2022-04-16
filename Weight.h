@@ -25,11 +25,11 @@ public:
     static const string KILO_LABEL;
     static const string SLUG_LABEL;
     static float globalWeight; //remove later
+    static float weight; //can change once set
 
 private:
     bool weightIsKnown = false;
     UnitOfWeight unitOfWeight = POUND; //once set cant change (not initialization though)
-    static float weight; //can change once set
     float maxWeight = UNKNOWN_WEIGHT; //cant change once set
     bool hasMaxWeight = false;
 
@@ -57,7 +57,7 @@ public:
     static float fromSlugToPound( float slug ) noexcept;
     static float fromPoundToKilogram( float pound ) noexcept;
     static float fromPoundToSlug( float pound ) noexcept;
-    static float convertWeight( float fromWeight
+    float convertWeight( float fromWeight
             ,UnitOfWeight fromUnit
             ,UnitOfWeight toUnit ) noexcept;
 
@@ -67,6 +67,8 @@ public:
     //dont really need any fuctions checking for if we have values
     //as we already have bools that do that, adding a function
     //seems a bit redundant
+    //@todo OPERATOR FUNCTIONS AND DUMP
+
 private:
 
 

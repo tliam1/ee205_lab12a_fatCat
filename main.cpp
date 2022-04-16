@@ -12,16 +12,17 @@
 #include <iostream>
 #include "Weight.h"
 
-#define debug
+//#define debug
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
     Weight exampleCat;
-    exampleCat = Weight(10.0f, Weight::KILO, 25.0f);
-    float catWeight = exampleCat.getWeight();
-    cout << "CatWeight is: " << catWeight << " " << exampleCat.getWeightUnit() << endl;
+    exampleCat = Weight(10.0f, Weight::KILO, 50.0f);
+    cout << "CatWeight is: " << exampleCat.getWeight() << " " << exampleCat.getWeightUnit() << endl;
 #ifdef debug
     exampleCat.setWeight(29, Weight::KILO); //should FAIL
 #endif
+    exampleCat.convertWeight(exampleCat.weight, Weight::KILO, Weight::POUND);
+    cout << "CatWeight is: " << exampleCat.getWeight() << " " << exampleCat.getWeightUnit() << endl;
     return 0;
 }

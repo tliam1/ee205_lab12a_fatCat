@@ -18,7 +18,7 @@ const string Weight::POUND_LABEL = "Pound";
 const string Weight::KILO_LABEL = "Kilo";
 const string Weight::SLUG_LABEL = "Slug";
 float Weight::globalWeight = 0;
-float Weight::weight = UNKNOWN_WEIGHT;
+float Weight::weight = UNKNOWN_WEIGHT; //do I need to convert max weight??
 //initializing constants end
 
 Weight::Weight() noexcept {
@@ -59,14 +59,16 @@ Weight::Weight(float newWeight, float newMaxWeight) : Weight() {
     assert(isWeightValid(newWeight));
     weight = newWeight;
     weightIsKnown = true;
-    maxWeight = newMaxWeight;
+    if (newMaxWeight > 0)
+        maxWeight = newMaxWeight;
     hasMaxWeight = true;
 }
 
 Weight::Weight(UnitOfWeight newUnitOfWeight, float newMaxWeight) : Weight() {
     //@todo validation
     weight = UNKNOWN_WEIGHT;
-    maxWeight = newMaxWeight;
+    if (newMaxWeight > 0)
+        maxWeight = newMaxWeight;
     hasMaxWeight = true;
     unitOfWeight = newUnitOfWeight;
 }
@@ -109,12 +111,13 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
     switch (fromUnit) {
         case POUND:
             fromWeight = fromWeight; //no conversion (default is lbs)
+            weight = fromWeight;
             break;
         case KILO:
-            fromKilogramToPound(fromWeight);
+            weight = fromKilogramToPound(fromWeight);
             break;
         case SLUG:
-            fromSlugToPound(fromWeight);
+            weight = fromSlugToPound(fromWeight);
             break;
         default:
             cout << "Illegal unit" << endl;
@@ -123,21 +126,26 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
     }
     switch (toUnit) {
         case POUND:
-            fromWeight = fromWeight;
-            weight = fromWeight;
+            weight = weight;
+            cout << weight << endl;
+            unitOfWeight = POUND;
             break;
         case KILO:
             weight = fromPoundToKilogram(fromWeight);
+            cout << weight << endl;
+            unitOfWeight = KILO;
             break;
         case SLUG:
             weight = fromPoundToSlug(fromWeight);
+            unitOfWeight = SLUG;
+            cout << weight << endl;
             break;
         default:
             cout << "Illegal unit" << endl;
             assert(false);
             break;
     }
-
+    isWeightValid(weight);
     return globalWeight;
 }
 
@@ -148,14 +156,14 @@ float Weight::getMaxWeight() const noexcept{
 }
 
 bool Weight::validate(float weightToValidate) const noexcept {
-    if (isWeightValid(weightToValidate) && getMaxWeight() != UNKNOWN_WEIGHT && weightIsKnown)
+    if (isWeightValid(weightToValidate) && getMaxWeight() > 0 && weightIsKnown)
         return true;
     cout << "Missing weight condition"<<endl;
     return false;
 }
 
 bool Weight::isWeightValid(float checkWeight) const {
-    if(checkWeight > 0 && (checkWeight < maxWeight || !hasMaxWeight))
+    if(checkWeight > 0 && (checkWeight <= maxWeight || !hasMaxWeight))
         return true;
     cout << "Missing weight condition"<<endl;
     return false;
