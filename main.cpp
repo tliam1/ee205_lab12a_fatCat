@@ -32,3 +32,4 @@ int main() {
     cout << boolalpha << "Is myWeight.weight greater than exampleCat.weight? \t" << myWeight.operator<(exampleCat) << endl;
     return 0;
 }
+//
