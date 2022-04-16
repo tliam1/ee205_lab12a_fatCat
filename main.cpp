@@ -16,13 +16,19 @@
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    Weight exampleCat;
-    exampleCat = Weight(10.0f, Weight::KILO, 50.0f);
-    cout << "CatWeight is: " << exampleCat.getWeight() << " " << exampleCat.getWeightUnit() << endl;
+    Weight exampleCat(10.0f, Weight::KILO, 20.0f);
+    exampleCat.dump();
+    Weight empty;
+    empty.dump();
 #ifdef debug
     exampleCat.setWeight(29, Weight::KILO); //should FAIL
 #endif
     exampleCat.convertWeight(exampleCat.weight, Weight::KILO, Weight::POUND);
-    cout << "CatWeight is: " << exampleCat.getWeight() << " " << exampleCat.getWeightUnit() << endl;
+    exampleCat.dump();
+
+    Weight myWeight( 3.14f, Weight::KILO, 20.0f );
+    myWeight.dump();
+
+    cout << boolalpha << "Is myWeight.weight greater than exampleCat.weight? \t" << myWeight.operator<(exampleCat) << endl;
     return 0;
 }

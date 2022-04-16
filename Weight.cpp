@@ -115,9 +115,11 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
             break;
         case KILO:
             weight = fromKilogramToPound(fromWeight);
+            maxWeight = fromKilogramToPound(maxWeight);
             break;
         case SLUG:
             weight = fromSlugToPound(fromWeight);
+            maxWeight = fromSlugToPound(maxWeight);
             break;
         default:
             cout << "Illegal unit" << endl;
@@ -127,18 +129,24 @@ float Weight::convertWeight(float fromWeight, Weight::UnitOfWeight fromUnit, Wei
     switch (toUnit) {
         case POUND:
             weight = weight;
+        #ifdef DEBUG
             cout << weight << endl;
+        #endif
             unitOfWeight = POUND;
             break;
         case KILO:
             weight = fromPoundToKilogram(fromWeight);
+            maxWeight = fromPoundToKilogram(maxWeight);
             cout << weight << endl;
             unitOfWeight = KILO;
             break;
         case SLUG:
             weight = fromPoundToSlug(fromWeight);
+            maxWeight = fromPoundToSlug(maxWeight);
             unitOfWeight = SLUG;
+        #ifdef DEBUG
             cout << weight << endl;
+        #endif
             break;
         default:
             cout << "Illegal unit" << endl;
@@ -173,9 +181,11 @@ Weight::UnitOfWeight Weight::getWeightUnit() const noexcept {
     return Weight::unitOfWeight;
 }
 
-float Weight::getWeight() const noexcept {
+float Weight::getWeight(UnitOfWeight newUnitOfWeight) noexcept {
     if (!weightIsKnown)
         return UNKNOWN_WEIGHT;
+
+    convertWeight(weight, unitOfWeight, newUnitOfWeight);
     return weight;
 }
 
@@ -188,5 +198,52 @@ void Weight::setWeight(float newWeight, Weight::UnitOfWeight weightUnits) {
     assert(isWeightValid(newWeight));
     Weight::weight = newWeight;
     Weight::unitOfWeight = weightUnits;
+}
+
+void Weight::dump() const {
+    cout << "==============================================" << endl;
+    cout << "Weight\t" << "this\t" << this << endl;
+    cout << boolalpha <<"Weight\t" << "isKnown\t" << weightIsKnown << endl;
+    cout << "Weight\t" << "weight\t" << weight << endl;
+    switch (unitOfWeight) {
+        case 0:
+            cout << "Weight\t" << "unitOfWeight\t" << POUND_LABEL << endl;
+            break;
+        case 1:
+            cout << "Weight\t" << "unitOfWeight\t" << KILO_LABEL << endl;
+            break;
+        case 2:
+            cout << "Weight\t" << "unitOfWeight\t" << SLUG_LABEL << endl;
+            break;
+        default:
+            cout << "Weight\t" << "unitOfWeight\t" << "UNKNOWN_UNIT" << endl;
+            break;
+    }
+    cout << boolalpha << "Weight\t" << "hasMax\t" << hasMaxWeight << endl;
+    cout << "Weight\t" << "maxWeight\t" << maxWeight << endl;
+    cout << "==============================================" << endl;
+}
+
+bool Weight::operator==(Weight& rhs_Weight){
+    float lhs_weight = (weightIsKnown) ? getWeight(Weight::POUND) : 0;
+    float rhs_weight = (rhs_Weight.weightIsKnown) ?
+                       rhs_Weight.getWeight(Weight::POUND) : 0;
+    return (lhs_weight == rhs_weight);
+}
+
+bool Weight::operator+=(float rhs_addToWeight) {
+    if (weight != UNKNOWN_WEIGHT && weight + rhs_addToWeight <= maxWeight){
+        weight += rhs_addToWeight;
+        return true;
+    }
+
+    return false; //can assert this. I'd rather not assert here because it becomes a lil messy
+}
+
+bool Weight::operator<(Weight& rhs_Weight) {
+    float lhs_weight = (weightIsKnown) ? getWeight(Weight::POUND) : 0;
+    float rhs_weight = (rhs_Weight.weightIsKnown) ?
+                       rhs_Weight.getWeight(Weight::POUND) : 0;
+    return (lhs_weight > rhs_weight);
 }
 

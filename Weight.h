@@ -49,7 +49,7 @@ public:
     //getters and setters
     float getMaxWeight() const noexcept;
     UnitOfWeight  getWeightUnit() const noexcept;
-    float getWeight() const noexcept;
+    float getWeight(UnitOfWeight) noexcept;
     void setWeight(float newWeight);
     void setWeight(float newWeight, UnitOfWeight weightUnits);
     //static methods
@@ -64,10 +64,11 @@ public:
     //checks/other methods
     bool validate(float weightToValidate) const noexcept;
     bool isWeightValid(float checkWeight) const;
-    //dont really need any fuctions checking for if we have values
-    //as we already have bools that do that, adding a function
-    //seems a bit redundant
-    //@todo OPERATOR FUNCTIONS AND DUMP
+    void dump() const;
+    bool operator==(Weight& rhs_Weight);
+    bool operator+=(float rhs_addToWeight);
+    bool operator<(Weight& rhs_Weight);
+
 
 private:
 
